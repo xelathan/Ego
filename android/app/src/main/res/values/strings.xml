@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ego2.0</string>
+    <string name="facebook_app_id">330158506106888</string>
+    <string name="fb_login_protocol_scheme">fb330158506106888</string>
+    <string name="facebook_client_token">f8995333383aaa176d89f9e80abba5ae</string>
+</resources>
