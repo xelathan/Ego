@@ -1,4 +1,4 @@
-const String prod = "https://ego-api-9d0b64be123d.herokuapp.com";
+const String prod = "https://egoapi-3abuugltmq-uw.a.run.app";
 const String dev = "http://localhost:8080";
 
 class Api {

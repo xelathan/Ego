@@ -1,5 +1,5 @@
 import 'package:ego/Settings/SettingsPage.dart';
-import 'package:ego/Socials/BotPage.dart';
+import 'package:ego/Bot/BotPage.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class BotModel {
-  static List<Map<String, dynamic>> messages = [
-    {
-      "text":
-          "Hi, I'm EgoAI, your personal assistant. I can help you with your social media marketing. What would you like to do?",
-      "isBot": true
-    },
-    {
-      "text":
-          "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
-      "isBot": false
-    }
-  ];
+  static List<Map<String, dynamic>> messages = [];
   static final GlobalKey listKey = GlobalKey();
   static final FocusNode focusNode = FocusNode();
   static final TextEditingController textEditingController =
@@ -23,4 +13,5 @@ class BotModel {
       AutoScrollController();
   static bool sending = false;
   bool isKeyboardVisible = false;
+  static List<Asset> resultList = [];
 }
