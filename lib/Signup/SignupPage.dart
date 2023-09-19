@@ -32,14 +32,14 @@ class _SignupPageState extends State<SignupPage> {
     });
     _controller.theme = CupertinoTheme.of(context);
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Signup'),
       ),
-      child: Center(
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Create Ego Account",
@@ -48,7 +48,7 @@ class _SignupPageState extends State<SignupPage> {
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 24.0),
               CupertinoTextField(
                 placeholder: 'First Name',
                 padding: EdgeInsets.all(12.0),

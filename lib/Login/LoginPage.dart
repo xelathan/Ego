@@ -25,14 +25,14 @@ class _LoginPageState extends State<LoginPage> {
     _controller.theme = CupertinoTheme.of(context);
 
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Login'),
       ),
-      child: Center(
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Ego",
@@ -102,7 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Text(""),
                   CupertinoButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _controller.toForgotPassword(context);
+                    },
                     child: Text('Forgot Password?'),
                   ),
                 ],

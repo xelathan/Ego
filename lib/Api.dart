@@ -1,4 +1,4 @@
-const String prod = "https://egoapi-3abuugltmq-uw.a.run.app";
+const String prod = "https://ego-api-3abuugltmq-wl.a.run.app";
 const String dev = "http://localhost:8080";
 
 class Api {

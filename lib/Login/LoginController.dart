@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ego/Api.dart';
+import 'package:ego/ForgotPassword/ForgotPasswordPage.dart';
 import 'package:ego/Signup/SignupPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,13 @@ class LoginPageController {
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SignupPage()),
+    );
+  }
+
+  void toForgotPassword(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => ForgotPasswordPage()),
     );
   }
 

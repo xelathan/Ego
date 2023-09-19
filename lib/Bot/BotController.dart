@@ -51,13 +51,7 @@ class BotController {
 
   Future<void> generateBotResponse(
       String message, List<Asset> imageList) async {
-    final response = await http.post(Uri.parse('${Api.endpoint}/chat'), body: {
-      "message": message,
-    }, headers: {
-      'Authorization': 'Bearer ${Api.token}' // Include the token in the headers
-    });
-    final data = jsonDecode(response.body);
-
+    var imageData = null;
     if (imageList.isNotEmpty) {
       List<Uint8List> imageBytesList =
           await Future.wait(imageList.map((asset) async {
@@ -80,8 +74,16 @@ class BotController {
                 'Bearer ${Api.token}' // Include the token in the headers
           });
 
-      print(jsonDecode(response.body));
+      imageData = (jsonDecode(response.body));
+      print(imageData);
     }
+
+    final response = await http.post(Uri.parse('${Api.endpoint}/chat'), body: {
+      "message": message,
+    }, headers: {
+      'Authorization': 'Bearer ${Api.token}' // Include the token in the headers
+    });
+    final data = jsonDecode(response.body);
 
     BotModel.messages
         .add({"text": data['bot_message'], "isBot": true, "images": <Asset>[]});

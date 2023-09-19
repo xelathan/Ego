@@ -1,6 +1,7 @@
 import 'package:ego/Bot/BotController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:ego/Bot/BotChatInput.dart';
 import 'package:ego/Bot/BotChatMessage.dart';
@@ -93,7 +94,6 @@ class _BotPageState extends State<BotPage> with WidgetsBindingObserver {
                       final messageContainerWidth =
                           MediaQuery.of(context).size.width *
                               0.7; // Adjust as needed
-                      print(_controller.sending);
 
                       if (textPainter.width > messageContainerWidth &&
                           _controller.sending) {
@@ -103,10 +103,11 @@ class _BotPageState extends State<BotPage> with WidgetsBindingObserver {
                         });
                       }
 
-                      return ChatMessage(
+                      return AutoScrollChatMessage(
                         text: messageText,
                         isBot: message["isBot"],
                         images: message["images"],
+                        index: index,
                       );
                     },
                   ),
@@ -125,9 +126,13 @@ class AutoScrollChatMessage extends StatefulWidget {
   final String text;
   final bool isBot;
   final int index;
+  final List<Asset> images;
 
   AutoScrollChatMessage(
-      {required this.text, required this.isBot, required this.index});
+      {required this.text,
+      required this.isBot,
+      required this.index,
+      required this.images});
 
   @override
   _AutoScrollChatMessageState createState() => _AutoScrollChatMessageState();
@@ -157,12 +162,12 @@ class _AutoScrollChatMessageState extends State<AutoScrollChatMessage> {
               ? KeepAliveChatMessage(
                   text: widget.text,
                   isBot: widget.isBot,
-                  images: _controller.resultList,
+                  images: widget.images,
                 )
               : ChatMessage(
                   text: widget.text,
                   isBot: widget.isBot,
-                  images: _controller.resultList,
+                  images: widget.images,
                 ))
           : Container(), // Placeholder before it's ready to scroll
     );
