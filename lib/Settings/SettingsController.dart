@@ -1,4 +1,5 @@
 import 'package:ego/Api.dart';
+import 'package:ego/Bot/BotController.dart';
 import 'package:ego/Login/LoginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -33,5 +34,6 @@ class SettingsController {
         CupertinoPageRoute(builder: (context) => LoginPage()),
       );
     }
+    BotController().dispose();
   }
 }

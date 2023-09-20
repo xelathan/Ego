@@ -10,6 +10,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final SignupController _controller = SignupController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -186,8 +187,15 @@ class _SignupPageState extends State<SignupPage> {
               Container(
                 width: double.infinity,
                 child: CupertinoButton.filled(
-                  child: Text('Signup', style: TextStyle(color: Colors.white)),
+                  child: _isLoading
+                      ? CupertinoActivityIndicator(
+                          color: CupertinoColors.white,
+                        )
+                      : Text('Signup', style: TextStyle(color: Colors.white)),
                   onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
                     if (_controller.validateSignup(context)) {
                       if (await _controller.signup(context)) {
                         setState(() {
@@ -200,6 +208,9 @@ class _SignupPageState extends State<SignupPage> {
                         });
                       }
                     }
+                    setState(() {
+                      _isLoading = false;
+                    });
                   },
                 ),
               ),

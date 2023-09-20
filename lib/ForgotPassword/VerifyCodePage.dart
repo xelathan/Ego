@@ -11,6 +11,7 @@ class VerifyCodePage extends StatefulWidget {
 }
 
 class _VerifyCodePageState extends State<VerifyCodePage> {
+  bool _isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -21,7 +22,7 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    _controller.setForgotPasswordState(() {
+    _controller.setVerifyCodeState(() {
       setState(() {});
     });
     _controller.theme = CupertinoTheme.of(context);
@@ -73,7 +74,13 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                 width: double.infinity,
                 child: CupertinoButton.filled(
                   onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
                     if (await _controller.validateCode()) {
+                      setState(() {
+                        _isLoading = false;
+                      });
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -81,10 +88,12 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                       );
                     }
                   },
-                  child: Text(
-                    'Send',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: _isLoading
+                      ? CupertinoActivityIndicator(color: CupertinoColors.white)
+                      : Text(
+                          'Send',
+                          style: TextStyle(color: Colors.white),
+                        ),
                 ),
               ),
             ],

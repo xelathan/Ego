@@ -33,7 +33,11 @@ class BotController {
 
   void init() {}
 
-  void dispose() {}
+  void dispose() {
+    BotModel.textEditingController.text = "";
+    BotModel.messages.clear();
+    BotModel.resultList.clear();
+  }
 
   Future<void> pickImages() async {
     try {
@@ -75,7 +79,8 @@ class BotController {
           });
 
       imageData = (jsonDecode(response.body));
-      print(imageData);
+      message +=
+          "Give me general information and fashion advice on: ${imageData['recommended_captions'].join(', ')}. Answer with nice spacing and formatting.";
     }
 
     final response = await http.post(Uri.parse('${Api.endpoint}/chat'), body: {

@@ -12,6 +12,8 @@ class ForgotPasswordController {
   factory ForgotPasswordController() => _this;
 
   late Function setForgotPasswordStateHandler;
+  late Function setVerifyCodeStateHandler;
+  late Function setNewPasswordStateHandler;
 
   void setForgotPasswordState(Function handler) {
     setForgotPasswordStateHandler = handler;
@@ -21,10 +23,31 @@ class ForgotPasswordController {
     setForgotPasswordStateHandler();
   }
 
+  void setVerifyCodeState(Function handler) {
+    setVerifyCodeStateHandler = handler;
+  }
+
+  void triggerVerifyCodeState() {
+    setVerifyCodeStateHandler();
+  }
+
+  void setNewPasswordState(Function handler) {
+    setNewPasswordStateHandler = handler;
+  }
+
+  void triggerNewPasswordState() {
+    setNewPasswordStateHandler();
+  }
+
   void dispose() {
     ForgotPasswordModel.email.text = "";
     ForgotPasswordModel.newPassword.text = "";
     ForgotPasswordModel.confirmPassword.text = "";
+    ForgotPasswordModel.confirmPasswordError = "";
+    ForgotPasswordModel.newPasswordError = "";
+    ForgotPasswordModel.verificationCode.text = "";
+    ForgotPasswordModel.verificationCodeError = "";
+    ForgotPasswordModel.emailErrorMessage = "";
   }
 
   Future<bool> validateEmail() async {
@@ -50,7 +73,6 @@ class ForgotPasswordController {
         valid = false;
       }
     }
-
     triggerForgotPasswordState();
     return Future(() => valid);
   }
@@ -65,6 +87,7 @@ class ForgotPasswordController {
     );
 
     if (response.statusCode == 200) {
+      triggerForgotPasswordState();
       success = true;
       return Future(() => success);
     } else {
@@ -76,19 +99,65 @@ class ForgotPasswordController {
   Future<bool> validateCode() async {
     bool success = false;
     final response = await http.post(
-      Uri.parse('${Api.endpoint}/send_email'),
+      Uri.parse('${Api.endpoint}/verify_code'),
       body: {
         'code': ForgotPasswordModel.verificationCode.text,
       },
     );
     if (response.statusCode == 200) {
+      success = true;
       return Future(() => success);
     } else {
       success = false;
       final data = jsonDecode(response.body);
-      ForgotPasswordModel.emailErrorMessage = data['message'];
+      ForgotPasswordModel.verificationCodeError = data['message'];
+      triggerVerifyCodeState();
       return Future(() => success);
     }
+  }
+
+  bool validatePassword() {
+    bool valid = true;
+    if (ForgotPasswordModel.newPassword.text.isEmpty) {
+      ForgotPasswordModel.newPasswordError = "Password is required";
+      valid = false;
+    } else if (ForgotPasswordModel.newPassword.text.length < 8) {
+      ForgotPasswordModel.newPasswordError =
+          "Password must be at least 8 characters";
+      valid = false;
+    } else {
+      ForgotPasswordModel.newPasswordError = "";
+    }
+
+    if (ForgotPasswordModel.confirmPassword.text.isEmpty) {
+      ForgotPasswordModel.confirmPasswordError = "Confirm Password is required";
+      valid = false;
+    } else if (ForgotPasswordModel.confirmPassword.text !=
+        ForgotPasswordModel.newPassword.text) {
+      ForgotPasswordModel.confirmPasswordError = "Password does not match";
+      valid = false;
+    } else {
+      ForgotPasswordModel.confirmPasswordError = "";
+    }
+
+    triggerNewPasswordState();
+    return valid;
+  }
+
+  Future<bool> changePassword() async {
+    bool success = false;
+    final response = await http.post(
+      Uri.parse('${Api.endpoint}/change_password'),
+      body: {
+        'email': ForgotPasswordModel.email.text.toLowerCase(),
+        'password': ForgotPasswordModel.newPassword.text,
+        'code': ForgotPasswordModel.verificationCode.text
+      },
+    );
+    if (response.statusCode == 200) {
+      success = true;
+    }
+    return Future(() => success);
   }
 
   TextEditingController get email => ForgotPasswordModel.email;

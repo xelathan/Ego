@@ -95,6 +95,11 @@ class _ChatInputState extends State<ChatInput> {
                       ? () {
                           // Handle sending message functionality
                           // For example, you can add the message to the list and clear the input field
+
+                          _controller.textEditingController.text == null
+                              ? _controller.textEditingController.text = ""
+                              : null;
+
                           _controller.sending = true;
                           _controller.triggerChatInputState();
                           final newMessage = {

@@ -11,10 +11,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -104,6 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoButton(
                     onPressed: () {
                       _controller.toForgotPassword(context);
+                      _controller.dispose();
+                      setState(() {});
                     },
                     child: Text('Forgot Password?'),
                   ),
@@ -114,23 +124,30 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 child: CupertinoButton.filled(
                   onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
                     if (_controller.validateLogin()) {
                       if (await _controller.login()) {
-                        setState(() {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => HomePage()),
-                            (Route<dynamic> route) => false,
-                          );
-                        });
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          CupertinoPageRoute(builder: (context) => HomePage()),
+                          (Route<dynamic> route) => false,
+                        );
+                        _controller.dispose();
+                        setState(() {});
                       }
                     }
+                    setState(() {
+                      _isLoading = false;
+                    });
                   },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: _isLoading
+                      ? CupertinoActivityIndicator(color: CupertinoColors.white)
+                      : Text(
+                          'Login',
+                          style: TextStyle(color: Colors.white),
+                        ),
                 ),
               ),
               SizedBox(height: 16.0),
@@ -145,6 +162,8 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     // Perform signup action here
                     _controller.toSignUp(context);
+                    _controller.dispose();
+                    setState(() {});
                   },
                   child: Text(
                     'Sign Up',
