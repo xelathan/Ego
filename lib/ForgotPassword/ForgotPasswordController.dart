@@ -40,36 +40,39 @@ class ForgotPasswordController {
   }
 
   void dispose() {
-    ForgotPasswordModel.email.text = "";
+    ForgotPasswordModel.phoneNumber.text = "";
     ForgotPasswordModel.newPassword.text = "";
     ForgotPasswordModel.confirmPassword.text = "";
     ForgotPasswordModel.confirmPasswordError = "";
     ForgotPasswordModel.newPasswordError = "";
-    ForgotPasswordModel.verificationCode.text = "";
+    ForgotPasswordModel.verificationCodeList
+        .forEach((controller) => controller.text = "");
+    ForgotPasswordModel.verificationCodeFocusList
+        .forEach((controller) => controller.unfocus());
     ForgotPasswordModel.verificationCodeError = "";
-    ForgotPasswordModel.emailErrorMessage = "";
+    ForgotPasswordModel.phoneErrorMessage = "";
   }
 
-  Future<bool> validateEmail() async {
+  Future<bool> validatePhoneNumber() async {
     bool valid = true;
-    final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-    if (ForgotPasswordModel.email.text.isEmpty) {
-      ForgotPasswordModel.emailErrorMessage = "Email is required";
+    RegExp phoneRegExp = RegExp(r'^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$');
+    if (ForgotPasswordModel.phoneNumber.text.isEmpty) {
+      ForgotPasswordModel.phoneErrorMessage = "Phone Number is required";
       valid = false;
-    } else if (!emailRegExp.hasMatch(ForgotPasswordModel.email.text)) {
-      ForgotPasswordModel.emailErrorMessage = "Invalid Email";
+    } else if (!phoneRegExp.hasMatch(ForgotPasswordModel.phoneNumber.text)) {
+      ForgotPasswordModel.phoneErrorMessage = "Invalid Phone Number";
       valid = false;
     } else {
       final response = await http.post(
-        Uri.parse('${Api.endpoint}/validate_email'),
+        Uri.parse('${Api.endpoint}/validate_phone'),
         body: {
-          'email': ForgotPasswordModel.email.text.toLowerCase(),
+          'phone': ForgotPasswordModel.phoneNumber.text,
         },
       );
       if (response.statusCode == 200) {
-        ForgotPasswordModel.emailErrorMessage = "";
+        ForgotPasswordModel.phoneErrorMessage = "";
       } else {
-        ForgotPasswordModel.emailErrorMessage = "Email doesn't exist";
+        ForgotPasswordModel.phoneErrorMessage = "Phone Number doesn't exist";
         valid = false;
       }
     }
@@ -77,12 +80,12 @@ class ForgotPasswordController {
     return Future(() => valid);
   }
 
-  Future<bool> sendEmail() async {
+  Future<bool> sendSMS() async {
     bool success = false;
     final response = await http.post(
-      Uri.parse('${Api.endpoint}/send_email'),
+      Uri.parse('${Api.endpoint}/send_sms'),
       body: {
-        'email': ForgotPasswordModel.email.text.toLowerCase(),
+        'phone': ForgotPasswordModel.phoneNumber.text,
       },
     );
 
@@ -91,7 +94,7 @@ class ForgotPasswordController {
       success = true;
       return Future(() => success);
     } else {
-      print("Could not send email");
+      print("Could not send sms");
       return Future(() => success);
     }
   }
@@ -101,7 +104,7 @@ class ForgotPasswordController {
     final response = await http.post(
       Uri.parse('${Api.endpoint}/verify_code'),
       body: {
-        'code': ForgotPasswordModel.verificationCode.text,
+        'code': verificationCode,
       },
     );
     if (response.statusCode == 200) {
@@ -149,9 +152,9 @@ class ForgotPasswordController {
     final response = await http.post(
       Uri.parse('${Api.endpoint}/change_password'),
       body: {
-        'email': ForgotPasswordModel.email.text.toLowerCase(),
+        'phone': ForgotPasswordModel.phoneNumber.text,
         'password': ForgotPasswordModel.newPassword.text,
-        'code': ForgotPasswordModel.verificationCode.text
+        'code': verificationCode
       },
     );
     if (response.statusCode == 200) {
@@ -160,14 +163,19 @@ class ForgotPasswordController {
     return Future(() => success);
   }
 
-  TextEditingController get email => ForgotPasswordModel.email;
+  String get verificationCode => ForgotPasswordModel.verificationCodeList
+      .map((controller) => controller.text)
+      .join();
+  TextEditingController get phoneNumber => ForgotPasswordModel.phoneNumber;
   TextEditingController get newPassword => ForgotPasswordModel.newPassword;
-  TextEditingController get verificationCode =>
-      ForgotPasswordModel.verificationCode;
+  List<TextEditingController> get verificationCodeList =>
+      ForgotPasswordModel.verificationCodeList;
+  List<FocusNode> get verificationCodeFocusList =>
+      ForgotPasswordModel.verificationCodeFocusList;
   TextEditingController get confirmPassword =>
       ForgotPasswordModel.confirmPassword;
   CupertinoThemeData get theme => ForgotPasswordModel.theme;
-  String get emailErrorMessage => ForgotPasswordModel.emailErrorMessage;
+  String get phoneErrorMessage => ForgotPasswordModel.phoneErrorMessage;
   String get verificationCodeErrorMessage =>
       ForgotPasswordModel.verificationCodeError;
   String get newPasswordError => ForgotPasswordModel.newPasswordError;

@@ -23,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     String? refreshToken = prefs.getString('refreshToken');
+
     // Wait for a moment to simulate a splash screen
 
     await Future.delayed(Duration(seconds: 2));
@@ -31,28 +32,35 @@ class _SplashScreenState extends State<SplashScreen> {
         token.isNotEmpty &&
         refreshToken != null &&
         refreshToken.isNotEmpty) {
-      final response = await http.post(
-        Uri.parse('${Api.endpoint}/refresh_token'),
-        body: {
-          "refresh_token": refreshToken,
-          "access_token": token,
-        },
-      );
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        Api.token = responseData['access_token'];
-        await prefs.setString('token', Api.token);
-        Navigator.pushReplacement(
-          context,
-          _fadePageRouteBuilder(HomePage()),
+      try {
+        final response = await http.post(
+          Uri.parse('${Api.endpoint}/refresh_token'),
+          body: {
+            "refresh_token": refreshToken,
+            "access_token": token,
+          },
         );
-      } else if (response.statusCode == 400) {
-        Api.token = token;
-        Navigator.pushReplacement(
-          context,
-          _fadePageRouteBuilder(HomePage()),
-        );
-      } else {
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          Api.token = responseData['access_token'];
+          await prefs.setString('token', Api.token);
+          Navigator.pushReplacement(
+            context,
+            _fadePageRouteBuilder(HomePage()),
+          );
+        } else if (response.statusCode == 400) {
+          Api.token = token;
+          Navigator.pushReplacement(
+            context,
+            _fadePageRouteBuilder(HomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            _fadePageRouteBuilder(LoginPage()),
+          );
+        }
+      } catch (e) {
         Navigator.pushReplacement(
           context,
           _fadePageRouteBuilder(LoginPage()),

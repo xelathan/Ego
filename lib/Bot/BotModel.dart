@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class BotModel {
@@ -13,5 +13,8 @@ class BotModel {
       AutoScrollController();
   static bool sending = false;
   bool isKeyboardVisible = false;
-  static List<Asset> resultList = [];
+  static List<XFile> resultList = [];
+  static List<dynamic> threads = [];
+  static bool isDrawerOpen = false;
+  static TextEditingController rename = TextEditingController();
 }

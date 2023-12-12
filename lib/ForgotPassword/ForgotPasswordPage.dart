@@ -31,7 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   _showToast() {
-    String message = 'Verification code sent to email';
+    String message = 'Verification code sent to phone';
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -79,23 +79,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
               SizedBox(height: 24.0),
               CupertinoTextField(
-                  placeholder: 'Email',
-                  padding: EdgeInsets.all(12.0),
-                  keyboardType: TextInputType.text,
-                  controller: _controller.email,
+                  placeholder: 'Phone Number',
+                  padding: const EdgeInsets.all(12.0),
+                  keyboardType: TextInputType.phone,
+                  controller: _controller.phoneNumber,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
-                        color: _controller.emailErrorMessage.isNotEmpty
+                        color: _controller.phoneErrorMessage.isNotEmpty
                             ? CupertinoColors.destructiveRed
                             : CupertinoColors.systemGrey3),
                   )),
-              _controller.emailErrorMessage.isNotEmpty
+              _controller.phoneErrorMessage.isNotEmpty
                   ? Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        _controller.emailErrorMessage,
-                        style: TextStyle(
+                        _controller.phoneErrorMessage,
+                        style: const TextStyle(
                           color: CupertinoColors.systemRed,
                         ),
                       ),
@@ -109,16 +109,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     setState(() {
                       _isLoading = true;
                     });
-                    if (await _controller.validateEmail()) {
-                      if (await _controller.sendEmail()) {
-                        _showToast();
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => VerifyCodePage()),
-                        );
-                      }
-                    }
+                    _showToast();
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => VerifyCodePage()),
+                    );
+                    // if (await _controller.validatePhoneNumber()) {
+                    //   if (await _controller.sendSMS()) {
+                    //     _showToast();
+                    //     Navigator.push(
+                    //       context,
+                    //       CupertinoPageRoute(
+                    //           builder: (context) => VerifyCodePage()),
+                    //     );
+                    //   }
+                    // }
                     setState(() {
                       _isLoading = false;
                     });

@@ -1,23 +1,5 @@
 PODS:
-  - BSGridCollectionViewLayout (1.2.5)
-  - BSImagePicker (2.10.3):
-    - BSGridCollectionViewLayout (= 1.2.5)
-    - BSImageView (= 1.0.3)
-  - BSImageView (1.0.3)
-  - FBAEMKit (16.1.3):
-    - FBSDKCoreKit_Basics (= 16.1.3)
-  - FBSDKCoreKit (16.1.3):
-    - FBAEMKit (= 16.1.3)
-    - FBSDKCoreKit_Basics (= 16.1.3)
-  - FBSDKCoreKit_Basics (16.1.3)
-  - FBSDKLoginKit (16.1.3):
-    - FBSDKCoreKit (= 16.1.3)
   - Flutter (1.0.0)
-  - flutter_facebook_auth (6.0.1):
-    - FBSDKLoginKit (~> 16.1.3)
-    - Flutter
-  - flutter_secure_storage (6.0.0):
-    - Flutter
   - flutter_web_auth (0.5.0):
     - Flutter
   - flutter_webview_plugin (0.0.1):
@@ -25,8 +7,7 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - multiple_images_picker (1.0.00):
-    - BSImagePicker (~> 2.10.3)
+  - image_picker_ios (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
@@ -37,61 +18,39 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
-  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - multiple_images_picker (from `.symlinks/plugins/multiple_images_picker/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
-    - BSGridCollectionViewLayout
-    - BSImagePicker
-    - BSImageView
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKLoginKit
     - Toast
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  flutter_facebook_auth:
-    :path: ".symlinks/plugins/flutter_facebook_auth/ios"
-  flutter_secure_storage:
-    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_web_auth:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
   flutter_webview_plugin:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  multiple_images_picker:
-    :path: ".symlinks/plugins/multiple_images_picker/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  BSGridCollectionViewLayout: 333dcb457a5a3bdd9212607ab5756553dcfe06cb
-  BSImagePicker: 07404254f2fcdaf5a2eb403c0f8c337267ce8738
-  BSImageView: a149459433a2687157d034c78e059d30ac7f2544
-  FBAEMKit: af2972f39bb0f3f7c45998f435b007833c32ffb2
-  FBSDKCoreKit: 19e2e18b3be578d7a51fed8fdd8c152bef0b9511
-  FBSDKCoreKit_Basics: dd9826ce3c9fd9f8cdf8dbbd0ef0a53e6c0c9e7e
-  FBSDKLoginKit: c395c63a1a6cf4a8a1e6103fd94b8c46329ee81c
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_facebook_auth: 47c7a8594f2d6864618e30b5a6d59dff0d2e59fe
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   flutter_web_auth: c25208760459cec375a3c39f6a8759165ca0fa4d
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
-  multiple_images_picker: c57bdc05801e244c110040889e84851a56e140fd
+  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a

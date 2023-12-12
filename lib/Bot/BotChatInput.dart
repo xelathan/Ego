@@ -2,8 +2,6 @@ import 'package:ego/Bot/BotController.dart';
 import 'package:ego/Bot/ImageListWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
 
 BotController _controller = BotController();
 
@@ -65,10 +63,11 @@ class _ChatInputState extends State<ChatInput> {
                           },
                           child: CupertinoTextField(
                             onTap: () {
-                              _controller.scrollControllerMessages
-                                  .scrollToIndex(
-                                _controller.messages.length - 1,
-                                preferPosition: AutoScrollPosition.end,
+                              _controller.scrollControllerMessages.animateTo(
+                                _controller.scrollControllerMessages.position
+                                    .maxScrollExtent,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
                               );
                               _controller.triggerBotState();
                             },
@@ -92,7 +91,7 @@ class _ChatInputState extends State<ChatInput> {
                 CupertinoButton(
                   disabledColor: CupertinoColors.systemGrey,
                   onPressed: !_controller.sending
-                      ? () {
+                      ? () async {
                           // Handle sending message functionality
                           // For example, you can add the message to the list and clear the input field
 
@@ -106,11 +105,11 @@ class _ChatInputState extends State<ChatInput> {
                             "text": _controller.textEditingController.text,
                             "isBot": false,
                             "images": _controller.resultList,
+                            "typewriterEffect": false
                           };
                           _controller.textEditingController.clear();
                           final imageList = _controller.resultList;
                           _controller.messages.add(newMessage);
-                          _controller.scrollToBottom();
                           _controller.triggerBotState();
                           _controller.generateBotResponse(
                               newMessage["text"], imageList);

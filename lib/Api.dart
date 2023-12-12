@@ -1,5 +1,5 @@
-const String prod = "https://ego-api-3abuugltmq-wl.a.run.app";
-const String dev = "http://localhost:8080";
+const String prod = "http://35.236.62.29";
+const String dev = "http://127.0.0.1:8080";
 
 class Api {
   static String token = "";

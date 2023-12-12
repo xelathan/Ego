@@ -33,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
     });
     _controller.theme = CupertinoTheme.of(context);
     return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Signup'),
       ),
@@ -119,6 +119,31 @@ class _SignupPageState extends State<SignupPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         _controller.emailErrorMessage,
+                        style: TextStyle(
+                          color: CupertinoColors.systemRed,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+              SizedBox(height: 16.0),
+              CupertinoTextField(
+                  placeholder: 'Phone number',
+                  padding: EdgeInsets.all(12.0),
+                  keyboardType: TextInputType.phone,
+                  controller: _controller.phone,
+                  focusNode: _controller.phoneFocus,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                        color: _controller.phoneErrorMessage.isNotEmpty
+                            ? CupertinoColors.destructiveRed
+                            : CupertinoColors.systemGrey3),
+                  )),
+              _controller.phoneErrorMessage.isNotEmpty
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _controller.phoneErrorMessage,
                         style: TextStyle(
                           color: CupertinoColors.systemRed,
                         ),

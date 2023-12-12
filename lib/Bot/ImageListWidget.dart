@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImageListWidget extends StatelessWidget {
-  final List<Asset> images;
+  final List<XFile> images;
   final Function(int) onRemove;
 
   ImageListWidget(this.images, this.onRemove);
@@ -14,15 +16,16 @@ class ImageListWidget extends StatelessWidget {
       runSpacing: 8,
       children: images.asMap().entries.map((entry) {
         final int index = entry.key;
-        final Asset asset = entry.value;
+        final xfile = entry.value;
+        final File file = File(xfile.path);
         return AnimatedSwitcher(
           duration:
               Duration(milliseconds: 300), // Adjust the duration as needed
           child: Stack(
             key: ValueKey<int>(index), // Key for the switcher
             children: [
-              AssetThumb(
-                asset: asset,
+              Image.file(
+                file,
                 width: 100,
                 height: 100,
               ),

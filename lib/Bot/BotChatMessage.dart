@@ -1,17 +1,23 @@
+import 'dart:io';
+
 import 'package:ego/Bot/BotController.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart'; // Add this line
+import 'package:image_picker/image_picker.dart';
 
 BotController _controller = BotController();
 
 class ChatMessage extends StatelessWidget {
   final String text;
   final bool isBot;
-  final List<Asset> images;
+  final List<Object> images;
+  final bool typewriterEffect;
 
-  ChatMessage({required this.text, required this.isBot, required this.images});
+  ChatMessage(
+      {required this.text,
+      required this.isBot,
+      required this.images,
+      required this.typewriterEffect});
 
   @override
   Widget build(BuildContext context) {
@@ -34,27 +40,45 @@ class ChatMessage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 8),
+                  images.length > 0
+                      ? Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: images.map((asset) {
+                            Image _img = asset as Image;
+                            return asset;
+                          }).toList(),
+                        )
+                      : Container(),
+                  images.length > 0 ? SizedBox(height: 8) : Container(),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          text,
-                          textStyle: TextStyle(
-                            color: CupertinoColors.black,
+                    child: typewriterEffect
+                        ? AnimatedTextKit(
+                            animatedTexts: [
+                              TyperAnimatedText(
+                                text,
+                                textStyle: TextStyle(
+                                  color: CupertinoColors.black,
+                                ),
+                                speed: Duration(milliseconds: 25),
+                              ),
+                            ],
+                            onFinished: () {
+                              _controller.sending = false;
+                              _controller.triggerChatInputState();
+                              _controller.triggerBotState();
+                            },
+                            repeatForever: false,
+                            totalRepeatCount: 0,
+                            isRepeatingAnimation: false,
+                          )
+                        : Text(
+                            text,
+                            style: TextStyle(
+                              color: CupertinoColors.black,
+                            ),
                           ),
-                          speed: Duration(milliseconds: 25),
-                        ),
-                      ],
-                      onFinished: () {
-                        _controller.sending = false;
-                        _controller.triggerChatInputState();
-                        _controller.triggerBotState();
-                      },
-                      repeatForever: false,
-                      totalRepeatCount: 0,
-                      isRepeatingAnimation: false,
-                    ),
                   ),
                 ],
               )
@@ -86,11 +110,15 @@ class ChatMessage extends StatelessWidget {
                           spacing: 8,
                           runSpacing: 8,
                           children: images.map((asset) {
-                            return AssetThumb(
-                              asset: asset,
-                              width: 100,
-                              height: 100,
-                            );
+                            if (asset is XFile) {
+                              return Image.file(
+                                File(asset.path),
+                                width: 100,
+                                height: 100,
+                              );
+                            } else {
+                              return Container();
+                            }
                           }).toList(),
                         )
                       : Container(),
@@ -104,10 +132,14 @@ class ChatMessage extends StatelessWidget {
 class KeepAliveChatMessage extends StatefulWidget {
   final String text;
   final bool isBot;
-  final List<Asset> images;
+  final List<Object> images;
+  final bool typewriterEffect;
 
   KeepAliveChatMessage(
-      {required this.text, required this.isBot, required this.images});
+      {required this.text,
+      required this.isBot,
+      required this.images,
+      required this.typewriterEffect});
 
   @override
   _KeepAliveChatMessageState createState() => _KeepAliveChatMessageState();
@@ -125,6 +157,7 @@ class _KeepAliveChatMessageState extends State<KeepAliveChatMessage>
       images: widget.images,
       text: widget.text,
       isBot: widget.isBot,
+      typewriterEffect: widget.typewriterEffect,
     );
   }
 }
