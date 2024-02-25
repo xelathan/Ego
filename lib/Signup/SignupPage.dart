@@ -33,213 +33,128 @@ class _SignupPageState extends State<SignupPage> {
     });
     _controller.theme = CupertinoTheme.of(context);
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.extraLightBackgroundGray,
       resizeToAvoidBottomInset: true,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Signup'),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text(
-                "Create Ego Account",
-                style: TextStyle(
-                    color: _controller.theme.primaryColor,
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 24.0),
-              CupertinoTextField(
-                placeholder: 'First Name',
-                padding: EdgeInsets.all(12.0),
-                keyboardType: TextInputType.text,
-                controller: _controller.firstName,
-                focusNode: _controller.firstNameFocusNode,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(
-                      color: _controller.firstNameErrorMessage.isNotEmpty
-                          ? CupertinoColors.destructiveRed
-                          : CupertinoColors.systemGrey3),
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    "Create Ego Account",
+                    style: TextStyle(
+                        color: _controller.theme.primaryColor,
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              _controller.firstNameErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.firstNameErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
+                SizedBox(height: 24.0),
+                CupertinoFormSection.insetGrouped(children: [
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("First name")),
+                    placeholder: 'required',
+                    padding: EdgeInsets.all(12.0),
+                    keyboardType: TextInputType.text,
+                    controller: _controller.firstName,
+                    focusNode: _controller.firstNameFocusNode,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("Last name")),
+                    placeholder: 'required',
+                    padding: EdgeInsets.all(12.0),
+                    keyboardType: TextInputType.text,
+                    controller: _controller.lastName,
+                    focusNode: _controller.lastNameFocusNode,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("Email")),
+                    placeholder: 'required',
+                    padding: EdgeInsets.all(12.0),
+                    keyboardType: TextInputType.text,
+                    controller: _controller.email,
+                    focusNode: _controller.emailFocusNode,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("Phone")),
+                    placeholder: 'required',
+                    padding: EdgeInsets.all(12.0),
+                    keyboardType: TextInputType.phone,
+                    controller: _controller.phone,
+                    focusNode: _controller.phoneFocus,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("Password")),
+                    placeholder: 'At least 8 characters',
+                    padding: EdgeInsets.all(12.0),
+                    obscureText: true,
+                    controller: _controller.password,
+                    focusNode: _controller.passwordFocusNode,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: SizedBox(child: Text("Confirm password")),
+                    placeholder: 'Must match password',
+                    padding: EdgeInsets.all(12.0),
+                    obscureText: true,
+                    controller: _controller.confirmPassword,
+                    focusNode: _controller.confirmPasswordFocusNode,
+                  ),
+                ]),
+                _controller.errorMessage.isNotEmpty
+                    ? Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            _controller.errorMessage,
+                            style: TextStyle(
+                              color: CupertinoColors.systemRed,
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Last Name',
-                  padding: EdgeInsets.all(12.0),
-                  keyboardType: TextInputType.text,
-                  controller: _controller.lastName,
-                  focusNode: _controller.lastNameFocusNode,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.lastNameErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.lastNameErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.lastNameErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Email',
-                  padding: EdgeInsets.all(12.0),
-                  keyboardType: TextInputType.text,
-                  controller: _controller.email,
-                  focusNode: _controller.emailFocusNode,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.emailErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.emailErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.emailErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Phone number',
-                  padding: EdgeInsets.all(12.0),
-                  keyboardType: TextInputType.phone,
-                  controller: _controller.phone,
-                  focusNode: _controller.phoneFocus,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.phoneErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.phoneErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.phoneErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              const Divider(
-                color: Colors.grey, // Set the color to gray
-                thickness: 1, // Set the thickness of the divider
-              ),
-              SizedBox(height: 16.0),
-              Text("Password must be at least 8 characters"),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Password',
-                  padding: EdgeInsets.all(12.0),
-                  obscureText: true,
-                  controller: _controller.password,
-                  focusNode: _controller.passwordFocusNode,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.passwordErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.passwordErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.passwordErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Confirm Password',
-                  padding: EdgeInsets.all(12.0),
-                  obscureText: true,
-                  controller: _controller.confirmPassword,
-                  focusNode: _controller.confirmPasswordFocusNode,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color:
-                            _controller.confirmPasswordErrorMessage.isNotEmpty
-                                ? CupertinoColors.destructiveRed
-                                : CupertinoColors.systemGrey3),
-                  )),
-              _controller.confirmPasswordErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.confirmPasswordErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              Container(
-                width: double.infinity,
-                child: CupertinoButton.filled(
-                  child: _isLoading
-                      ? CupertinoActivityIndicator(
-                          color: CupertinoColors.white,
-                        )
-                      : Text('Signup', style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (_controller.validateSignup(context)) {
-                      if (await _controller.signup(context)) {
+                      )
+                    : SizedBox(),
+                SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Container(
+                    width: double.infinity,
+                    child: CupertinoButton.filled(
+                      child: _isLoading
+                          ? CupertinoActivityIndicator(
+                              color: CupertinoColors.white,
+                            )
+                          : Text('Signup',
+                              style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
                         setState(() {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => HomePage()),
-                            (Route<dynamic> route) => false,
-                          );
+                          _isLoading = true;
                         });
-                      }
-                    }
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  },
+                        if (_controller.validateSignup(context)) {
+                          if (await _controller.signup(context)) {
+                            setState(() {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => HomePage()),
+                                (Route<dynamic> route) => false,
+                              );
+                            });
+                          }
+                        }
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

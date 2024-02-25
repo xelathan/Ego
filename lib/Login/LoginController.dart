@@ -39,8 +39,7 @@ class LoginPageController {
   void dispose() {
     LoginModel.email.text = "";
     LoginModel.password.text = "";
-    LoginModel.emailErrorMessage = "";
-    LoginModel.passwordErrorMessage = "";
+    LoginModel.errorMessage = "";
   }
 
   Future<bool> login() async {
@@ -63,9 +62,9 @@ class LoginPageController {
     } else {
       final responseData = jsonDecode(response.body);
       responseData['message'] == 'Incorrect password'
-          ? LoginModel.passwordErrorMessage = "Incorrect Password"
+          ? LoginModel.errorMessage = "Incorrect Password"
           : responseData['message'] == "Email does not exist"
-              ? LoginModel.emailErrorMessage = "Email does not exist"
+              ? LoginModel.errorMessage = "Email does not exist"
               : null;
       triggerLoginState();
       return false;
@@ -76,25 +75,23 @@ class LoginPageController {
     bool valid = true;
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
     if (LoginModel.email.text.isEmpty) {
-      LoginModel.emailErrorMessage = "Email is required";
+      LoginModel.errorMessage = "Email is required";
       valid = false;
     } else if (!emailRegExp.hasMatch(LoginModel.email.text)) {
-      LoginModel.emailErrorMessage = "Invalid Email";
+      LoginModel.errorMessage = "Invalid Email";
       valid = false;
     } else {
-      LoginModel.emailErrorMessage = "";
+      if (LoginModel.password.text.isEmpty) {
+        LoginModel.errorMessage = "Password is required";
+        valid = false;
+      } else if (LoginModel.password.text.length < 8) {
+        LoginModel.errorMessage = "Password must be at least 8 characters";
+        valid = false;
+      } else {
+        LoginModel.errorMessage = "";
+      }
     }
 
-    if (LoginModel.password.text.isEmpty) {
-      LoginModel.passwordErrorMessage = "Password is required";
-      valid = false;
-    } else if (LoginModel.password.text.length < 8) {
-      LoginModel.passwordErrorMessage =
-          "Password must be at least 8 characters";
-      valid = false;
-    } else {
-      LoginModel.passwordErrorMessage = "";
-    }
     triggerLoginState();
     return valid;
   }
@@ -103,8 +100,7 @@ class LoginPageController {
   TextEditingController get password => LoginModel.password;
   bool get correctCredentials => LoginModel.correctCredentials;
   CupertinoThemeData get theme => LoginModel.theme;
-  String get emailErrorMessage => LoginModel.emailErrorMessage;
-  String get passwordErrorMessage => LoginModel.passwordErrorMessage;
+  String get errorMessage => LoginModel.errorMessage;
 
   set theme(CupertinoThemeData theme) {
     LoginModel.theme = theme;

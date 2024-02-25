@@ -11,5 +11,4 @@ class ForgotPasswordModel {
   static String phoneErrorMessage = "";
   static String verificationCodeError = "";
   static String newPasswordError = "";
-  static String confirmPasswordError = "";
 }

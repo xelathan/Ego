@@ -52,104 +52,89 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     });
     _controller.theme = CupertinoTheme.of(context);
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.extraLightBackgroundGray,
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Forgot Password'),
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
             children: [
-              Text(
-                "Change Password",
-                style: TextStyle(
-                    color: _controller.theme.primaryColor,
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                "Password must be at least 8 characters",
-                style: TextStyle(
-                  color: _controller.theme.primaryColor,
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Text(
+                  "Change Password",
+                  style: TextStyle(
+                      color: _controller.theme.primaryColor,
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Password',
+              CupertinoFormSection.insetGrouped(children: [
+                CupertinoTextFormFieldRow(
+                  prefix: Text("Password"),
+                  placeholder: 'At least 8 characters',
                   padding: EdgeInsets.all(12.0),
                   obscureText: true,
                   controller: _controller.newPassword,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.newPasswordError.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.newPasswordError.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.newPasswordError,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Confirm Password',
+                ),
+                CupertinoTextFormFieldRow(
+                  prefix: Text('Confirm Password'),
+                  placeholder: 'Must match password',
                   padding: EdgeInsets.all(12.0),
                   obscureText: true,
                   controller: _controller.confirmPassword,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.confirmPasswordError.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.confirmPasswordError.isNotEmpty
+                ),
+              ]),
+              _controller.newPasswordError.isNotEmpty
                   ? Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.confirmPasswordError,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Text(
+                          _controller.newPasswordError,
+                          style: TextStyle(
+                            color: CupertinoColors.systemRed,
+                          ),
                         ),
                       ),
                     )
                   : SizedBox(),
               SizedBox(height: 16.0),
-              Container(
-                width: double.infinity,
-                child: CupertinoButton.filled(
-                  child: _isLoading
-                      ? CupertinoActivityIndicator(color: CupertinoColors.white)
-                      : Text('Submit', style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (_controller.validatePassword()) {
-                      if (await _controller.changePassword()) {
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          CupertinoPageRoute(builder: (context) => LoginPage()),
-                          (Route<dynamic> route) => false,
-                        );
-                        _controller.dispose();
-                        setState(() {});
-                        _showToast();
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20),
+                child: Container(
+                  width: double.infinity,
+                  child: CupertinoButton.filled(
+                    child: _isLoading
+                        ? CupertinoActivityIndicator(
+                            color: CupertinoColors.white)
+                        : Text('Submit', style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      if (_controller.validatePassword()) {
+                        if (await _controller.changePassword()) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => LoginPage()),
+                            (Route<dynamic> route) => false,
+                          );
+                          _controller.dispose();
+                          setState(() {});
+                          _showToast();
+                        }
                       }
-                    }
-                  },
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                  ),
                 ),
               ),
             ],

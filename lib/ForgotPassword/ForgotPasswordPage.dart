@@ -60,81 +60,88 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     });
     _controller.theme = CupertinoTheme.of(context);
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.extraLightBackgroundGray,
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Forgot Password'),
       ),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Send verification code",
-                style: TextStyle(
-                    color: _controller.theme.primaryColor,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Text(
+                  "Send verification code",
+                  style: TextStyle(
+                      color: _controller.theme.primaryColor,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               SizedBox(height: 24.0),
-              CupertinoTextField(
-                  placeholder: 'Phone Number',
+              CupertinoFormSection.insetGrouped(children: [
+                CupertinoTextFormFieldRow(
+                  prefix: Text("Phone"),
                   padding: const EdgeInsets.all(12.0),
                   keyboardType: TextInputType.phone,
                   controller: _controller.phoneNumber,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.phoneErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
+                ),
+              ]),
               _controller.phoneErrorMessage.isNotEmpty
                   ? Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.phoneErrorMessage,
-                        style: const TextStyle(
-                          color: CupertinoColors.systemRed,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Text(
+                          _controller.phoneErrorMessage,
+                          style: const TextStyle(
+                            color: CupertinoColors.systemRed,
+                          ),
                         ),
                       ),
                     )
                   : SizedBox(),
               SizedBox(height: 24.0),
-              Container(
-                width: double.infinity,
-                child: CupertinoButton.filled(
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    _showToast();
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => VerifyCodePage()),
-                    );
-                    // if (await _controller.validatePhoneNumber()) {
-                    //   if (await _controller.sendSMS()) {
-                    //     _showToast();
-                    //     Navigator.push(
-                    //       context,
-                    //       CupertinoPageRoute(
-                    //           builder: (context) => VerifyCodePage()),
-                    //     );
-                    //   }
-                    // }
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  },
-                  child: _isLoading
-                      ? CupertinoActivityIndicator(color: CupertinoColors.white)
-                      : Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.white),
-                        ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20),
+                child: Container(
+                  width: double.infinity,
+                  child: CupertinoButton.filled(
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      // _showToast();
+                      // Navigator.push(
+                      //   context,
+                      //   CupertinoPageRoute(
+                      //       builder: (context) => VerifyCodePage()),
+                      // );
+                      if (await _controller.validatePhoneNumber()) {
+                        if (await _controller.sendSMS()) {
+                          _showToast();
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => VerifyCodePage()),
+                          );
+                        }
+                      }
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    child: _isLoading
+                        ? CupertinoActivityIndicator(
+                            color: CupertinoColors.white)
+                        : Text(
+                            'Submit',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  ),
                 ),
               ),
             ],

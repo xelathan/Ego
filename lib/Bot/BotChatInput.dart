@@ -22,7 +22,7 @@ class _ChatInputState extends State<ChatInput> {
       onTap: () => _controller.focusNode.unfocus(),
       child: Container(
         padding: EdgeInsets.all(8),
-        color: Colors.grey[200],
+        color: CupertinoColors.white,
         child: Column(
           children: [
             _controller.resultList.isNotEmpty && !_controller.sending
@@ -78,7 +78,6 @@ class _ChatInputState extends State<ChatInput> {
                             maxLines: null, // Allow multiple lines
                             keyboardType: TextInputType.multiline,
                             decoration: BoxDecoration(
-                              color: Colors.white,
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),

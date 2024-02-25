@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     _controller.theme = CupertinoTheme.of(context);
 
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.extraLightBackgroundGray,
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Login'),
@@ -58,49 +59,33 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 24.0),
-              CupertinoTextField(
-                  placeholder: 'Email',
-                  padding: EdgeInsets.all(12.0),
-                  keyboardType: TextInputType.text,
-                  controller: _controller.email,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.emailErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.emailErrorMessage.isNotEmpty
+              CupertinoFormSection.insetGrouped(
+                children: [
+                  CupertinoTextFormFieldRow(
+                    prefix: Text("Email"),
+                    padding: EdgeInsets.all(12.0),
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _controller.email,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    prefix: Text("Password"),
+                    padding: EdgeInsets.all(12.0),
+                    obscureText: true,
+                    controller: _controller.password,
+                    keyboardType: TextInputType.visiblePassword,
+                  ),
+                ],
+              ),
+              _controller.errorMessage.isNotEmpty
                   ? Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.emailErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 16.0),
-              CupertinoTextField(
-                  placeholder: 'Password',
-                  padding: EdgeInsets.all(12.0),
-                  obscureText: true,
-                  controller: _controller.password,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                        color: _controller.passwordErrorMessage.isNotEmpty
-                            ? CupertinoColors.destructiveRed
-                            : CupertinoColors.systemGrey3),
-                  )),
-              _controller.passwordErrorMessage.isNotEmpty
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _controller.passwordErrorMessage,
-                        style: TextStyle(
-                          color: CupertinoColors.systemRed,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 24.0),
+                        child: Text(
+                          _controller.errorMessage,
+                          style: TextStyle(
+                            color: CupertinoColors.systemRed,
+                          ),
                         ),
                       ),
                     )

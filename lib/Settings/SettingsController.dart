@@ -1,6 +1,7 @@
 import 'package:ego/Api.dart';
 import 'package:ego/Bot/BotController.dart';
 import 'package:ego/Login/LoginPage.dart';
+import 'package:ego/Settings/Account/AccountPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,5 +36,10 @@ class SettingsController {
       );
     }
     BotController().dispose();
+  }
+
+  void toAccountPage(BuildContext context) {
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => AccountPage()));
   }
 }

@@ -26,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: 16.0,
               title: const Text('Account'),
               onTap: () {
-                //_controller.signOut(context);
+                _controller.toAccountPage(context);
               },
             ),
             CupertinoListSelectable(

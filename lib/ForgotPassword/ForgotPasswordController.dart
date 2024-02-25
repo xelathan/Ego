@@ -43,7 +43,6 @@ class ForgotPasswordController {
     ForgotPasswordModel.phoneNumber.text = "";
     ForgotPasswordModel.newPassword.text = "";
     ForgotPasswordModel.confirmPassword.text = "";
-    ForgotPasswordModel.confirmPasswordError = "";
     ForgotPasswordModel.newPasswordError = "";
     ForgotPasswordModel.verificationCodeList
         .forEach((controller) => controller.text = "");
@@ -128,19 +127,15 @@ class ForgotPasswordController {
       ForgotPasswordModel.newPasswordError =
           "Password must be at least 8 characters";
       valid = false;
-    } else {
-      ForgotPasswordModel.newPasswordError = "";
-    }
-
-    if (ForgotPasswordModel.confirmPassword.text.isEmpty) {
-      ForgotPasswordModel.confirmPasswordError = "Confirm Password is required";
+    } else if (ForgotPasswordModel.confirmPassword.text.isEmpty) {
+      ForgotPasswordModel.newPasswordError = "Confirm Password is required";
       valid = false;
     } else if (ForgotPasswordModel.confirmPassword.text !=
         ForgotPasswordModel.newPassword.text) {
-      ForgotPasswordModel.confirmPasswordError = "Password does not match";
+      ForgotPasswordModel.newPasswordError = "Password does not match";
       valid = false;
     } else {
-      ForgotPasswordModel.confirmPasswordError = "";
+      ForgotPasswordModel.newPasswordError = "";
     }
 
     triggerNewPasswordState();
@@ -179,9 +174,12 @@ class ForgotPasswordController {
   String get verificationCodeErrorMessage =>
       ForgotPasswordModel.verificationCodeError;
   String get newPasswordError => ForgotPasswordModel.newPasswordError;
-  String get confirmPasswordError => ForgotPasswordModel.confirmPasswordError;
 
   set theme(CupertinoThemeData theme) {
     ForgotPasswordModel.theme = theme;
+  }
+
+  set verificationCodeErrorMessage(String s) {
+    ForgotPasswordModel.verificationCodeError = s;
   }
 }

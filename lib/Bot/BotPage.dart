@@ -67,6 +67,7 @@ class _BotPageState extends State<BotPage> with WidgetsBindingObserver {
     });
     return Material(
       child: KeyboardDismisser(
+        gestures: [GestureType.onVerticalDragEnd],
         child: Stack(
           children: <Widget>[
             GestureDetector(
@@ -77,6 +78,7 @@ class _BotPageState extends State<BotPage> with WidgetsBindingObserver {
                 }
               },
               child: CupertinoPageScaffold(
+                backgroundColor: CupertinoColors.extraLightBackgroundGray,
                 navigationBar: CupertinoNavigationBar(
                   middle: Text('EgoAI'),
                   trailing: CupertinoButton(

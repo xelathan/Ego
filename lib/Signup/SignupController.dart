@@ -27,12 +27,7 @@ class SignupController {
     SignupModel.password.text = "";
     SignupModel.phone.text = "";
     SignupModel.confirmPassword.text = "";
-    SignupModel.firstNameErrorMessage = "";
-    SignupModel.lastNameErrorMessage = "";
-    SignupModel.emailErrorMessage = "";
-    SignupModel.passwordErrorMessage = "";
-    SignupModel.confirmPasswordErrorMessage = "";
-    SignupModel.phoneErrorMessage = "";
+    SignupModel.errorMessage = "";
     SignupModel.firstNameFocus.unfocus();
     SignupModel.lastNameFocus.unfocus();
     SignupModel.emailFocus.unfocus();
@@ -46,68 +41,52 @@ class SignupController {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
     final phoneRegExp = RegExp(r'^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$');
     if (SignupModel.firstName.text.isEmpty) {
-      SignupModel.firstNameErrorMessage = "First Name is required";
+      SignupModel.errorMessage = "First Name is required";
       valid = false;
-    } else {
-      SignupModel.firstNameErrorMessage = "";
-    }
-    if (SignupModel.lastName.text.isEmpty) {
-      SignupModel.lastNameErrorMessage = "Last Name is required";
+    } else if (SignupModel.lastName.text.isEmpty) {
+      SignupModel.errorMessage = "Last Name is required";
       valid = false;
-    } else {
-      SignupModel.lastNameErrorMessage = "";
-    }
-    if (SignupModel.email.text.isEmpty) {
-      SignupModel.emailErrorMessage = "Email is required";
+    } else if (SignupModel.email.text.isEmpty) {
+      SignupModel.errorMessage = "Email is required";
       valid = false;
     } else if (!emailRegExp.hasMatch(SignupModel.email.text)) {
-      SignupModel.emailErrorMessage = "Invalid email";
+      SignupModel.errorMessage = "Invalid email";
       valid = false;
-    } else {
-      SignupModel.emailErrorMessage = "";
-    }
-
-    if (SignupModel.phone.text.isEmpty) {
-      SignupModel.phoneErrorMessage = "Phone number is required";
+    } else if (SignupModel.phone.text.isEmpty) {
+      SignupModel.errorMessage = "Phone number is required";
       valid = false;
     } else if (!phoneRegExp.hasMatch(SignupModel.phone.text)) {
-      SignupModel.phoneErrorMessage = "Invalid phone number";
+      SignupModel.errorMessage = "Invalid phone number";
       valid = false;
-    } else {
-      SignupModel.phoneErrorMessage = "";
-    }
-
-    if (SignupModel.password.text.isEmpty) {
-      SignupModel.passwordErrorMessage = "Password is required";
+    } else if (SignupModel.password.text.isEmpty) {
+      SignupModel.errorMessage = "Password is required";
       valid = false;
     } else if (SignupModel.password.text.length < 8) {
-      SignupModel.passwordErrorMessage =
-          "Password must be at least 8 characters";
+      SignupModel.errorMessage = "Password must be at least 8 characters";
       valid = false;
-    } else {
-      SignupModel.passwordErrorMessage = "";
-    }
-    if (SignupModel.confirmPassword.text.isEmpty) {
-      SignupModel.confirmPasswordErrorMessage = "Confirm Password is required";
+    } else if (SignupModel.confirmPassword.text.isEmpty) {
+      SignupModel.errorMessage = "Confirm Password is required";
       valid = false;
     } else if (SignupModel.confirmPassword.text != SignupModel.password.text) {
-      SignupModel.confirmPasswordErrorMessage = "Password does not match";
+      SignupModel.errorMessage = "Password does not match";
       valid = false;
     } else {
-      SignupModel.confirmPasswordErrorMessage = "";
+      SignupModel.errorMessage = "";
     }
 
-    if (SignupModel.firstNameErrorMessage.isNotEmpty) {
+    if (SignupModel.errorMessage.toLowerCase().contains("first name")) {
       FocusScope.of(context).requestFocus(SignupModel.firstNameFocus);
-    } else if (SignupModel.lastNameErrorMessage.isNotEmpty) {
+    } else if (SignupModel.errorMessage.toLowerCase().contains("last name")) {
       FocusScope.of(context).requestFocus(SignupModel.lastNameFocus);
-    } else if (SignupModel.emailErrorMessage.isNotEmpty) {
+    } else if (SignupModel.errorMessage.toLowerCase().contains("email")) {
       FocusScope.of(context).requestFocus(SignupModel.emailFocus);
-    } else if (SignupModel.phoneErrorMessage.isNotEmpty) {
+    } else if (SignupModel.errorMessage.toLowerCase().contains('phone')) {
       FocusScope.of(context).requestFocus(SignupModel.phoneFocus);
-    } else if (SignupModel.passwordErrorMessage.isNotEmpty) {
+    } else if (SignupModel.errorMessage.toLowerCase().contains('password is') ||
+        SignupModel.errorMessage.toLowerCase().contains('password must')) {
       FocusScope.of(context).requestFocus(SignupModel.passwordFocus);
-    } else if (SignupModel.confirmPasswordErrorMessage.isNotEmpty) {
+    } else if (SignupModel.errorMessage.toLowerCase().contains('confirm') ||
+        SignupModel.errorMessage.toLowerCase().contains('not match')) {
       FocusScope.of(context).requestFocus(SignupModel.confirmPasswordFocus);
     }
     triggerSignupState();
@@ -134,7 +113,7 @@ class SignupController {
       return true;
     } else {
       final responseData = jsonDecode(response.body);
-      SignupModel.emailErrorMessage = responseData['message'];
+      SignupModel.errorMessage = responseData['message'];
       triggerSignupState();
       return false;
     }
@@ -152,37 +131,11 @@ class SignupController {
   FocusNode get lastNameFocusNode => SignupModel.lastNameFocus;
   FocusNode get confirmPasswordFocusNode => SignupModel.confirmPasswordFocus;
   FocusNode get phoneFocus => SignupModel.phoneFocus;
-  String get firstNameErrorMessage => SignupModel.firstNameErrorMessage;
-  String get lastNameErrorMessage => SignupModel.lastNameErrorMessage;
-  String get emailErrorMessage => SignupModel.emailErrorMessage;
-  String get passwordErrorMessage => SignupModel.passwordErrorMessage;
-  String get confirmPasswordErrorMessage =>
-      SignupModel.confirmPasswordErrorMessage;
-  String get phoneErrorMessage => SignupModel.phoneErrorMessage;
+  String get errorMessage => SignupModel.errorMessage;
   CupertinoThemeData get theme => SignupModel.theme;
 
-  set firstNameErrorMessage(String firstNameErrorMessage) {
-    SignupModel.firstNameErrorMessage = firstNameErrorMessage;
-  }
-
-  set lastNameErrorMessage(String lastNameErrorMessage) {
-    SignupModel.lastNameErrorMessage = lastNameErrorMessage;
-  }
-
-  set emailErrorMessage(String emailErrorMessage) {
-    SignupModel.emailErrorMessage = emailErrorMessage;
-  }
-
-  set phoneErrorMessage(String phoneErrorMessage) {
-    SignupModel.phoneErrorMessage = phoneErrorMessage;
-  }
-
-  set passwordErrorMessage(String passwordErrorMessage) {
-    SignupModel.passwordErrorMessage = passwordErrorMessage;
-  }
-
-  set confirmPasswordErrorMessage(String confirmPasswordErrorMessage) {
-    SignupModel.confirmPasswordErrorMessage = confirmPasswordErrorMessage;
+  set errorMessage(String errorMessage) {
+    SignupModel.errorMessage = errorMessage;
   }
 
   set theme(CupertinoThemeData theme) {

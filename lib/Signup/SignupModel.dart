@@ -13,11 +13,6 @@ class SignupModel {
   static final FocusNode phoneFocus = FocusNode();
   static final FocusNode passwordFocus = FocusNode();
   static final FocusNode confirmPasswordFocus = FocusNode();
-  static String firstNameErrorMessage = "";
-  static String lastNameErrorMessage = "";
-  static String emailErrorMessage = "";
-  static String phoneErrorMessage = "";
-  static String passwordErrorMessage = "";
-  static String confirmPasswordErrorMessage = "";
+  static String errorMessage = "";
   static late CupertinoThemeData theme;
 }

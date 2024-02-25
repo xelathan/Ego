@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:ego/ForgotPassword/ForgotPasswordController.dart';
 import 'package:ego/ForgotPassword/NewPasswordPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 final ForgotPasswordController _controller = ForgotPasswordController();
 
@@ -13,9 +15,37 @@ class VerifyCodePage extends StatefulWidget {
 
 class _VerifyCodePageState extends State<VerifyCodePage> {
   bool _isLoading = false;
+  late FToast fToast;
+  final Duration resendDuration = Duration(minutes: 3);
+  bool _allowResend = true;
+
   @override
   void initState() {
     super.initState();
+    _isLoading = false;
+    _controller.verificationCodeErrorMessage = "";
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  _showToast(message) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: CupertinoColors.darkBackgroundGray,
+      ),
+      child: Text(
+        message,
+        style: TextStyle(color: CupertinoColors.white),
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
   }
 
   @override
@@ -29,6 +59,7 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
         FocusScope.of(context).unfocus();
       },
       child: CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.extraLightBackgroundGray,
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           middle: Text('Forgot Password'),
@@ -64,7 +95,6 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                           _controller.verificationCodeList[focusedIndex]
                               .clear();
                           if (focusedIndex > 0) {
-                            print("in");
                             FocusScope.of(context).requestFocus(
                               _controller
                                   .verificationCodeFocusList[focusedIndex - 1],
@@ -76,18 +106,38 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                   ),
                 ),
                 _controller.verificationCodeErrorMessage.isNotEmpty
-                    ? Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          _controller.verificationCodeErrorMessage,
-                          style: TextStyle(
-                            color: CupertinoColors.systemRed,
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 20.0, top: 8),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            _controller.verificationCodeErrorMessage,
+                            style: TextStyle(
+                              color: CupertinoColors.systemRed,
+                            ),
                           ),
                         ),
                       )
                     : SizedBox(),
                 SizedBox(height: 8.0),
-                CupertinoButton(child: Text("Resend code"), onPressed: () {}),
+                CupertinoButton(
+                    child: Text("Resend code"),
+                    onPressed: () async {
+                      if (_allowResend) {
+                        if (await _controller.sendSMS()) {
+                          _showToast("New code sent");
+                          setState(() {
+                            _allowResend = false;
+                          });
+                          Timer(resendDuration, () {
+                            _allowResend = true;
+                          });
+                        }
+                      } else {
+                        _showToast(
+                            "Please wait 3 minutes before requesting for a new code");
+                      }
+                    }),
                 SizedBox(height: 8.0),
                 Container(
                   width: double.infinity,
@@ -97,15 +147,16 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                         _isLoading = true;
                       });
                       if (await _controller.validateCode()) {
-                        setState(() {
-                          _isLoading = false;
-                        });
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
                               builder: (context) => NewPasswordPage()),
                         );
                       }
+
+                      setState(() {
+                        _isLoading = false;
+                      });
                     },
                     child: _isLoading
                         ? CupertinoActivityIndicator(
@@ -175,8 +226,8 @@ class _DigitCardTextFieldState extends State<DigitCardTextField> {
         textAlign: TextAlign.center,
         decoration: BoxDecoration(
           color: isFocused
-              ? CupertinoColors.systemGrey3
-              : CupertinoColors.lightBackgroundGray,
+              ? CupertinoColors.systemGrey2
+              : CupertinoColors.systemGrey4,
           borderRadius: BorderRadius.circular(8.0),
         ),
         textAlignVertical: TextAlignVertical.center,
